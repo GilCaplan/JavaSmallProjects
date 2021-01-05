@@ -1,0 +1,86 @@
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class IntStackUtils{
+	public IntStackUtils(Stack<Integer> s) {
+		s=fillStack(s);
+	}
+	public static Scanner reader=new Scanner(System.in);
+
+	public static Stack<Integer> fillStack(Stack<Integer> s){
+		int num= reader.nextInt();//1
+		while(num!=-1) {
+			num=reader.nextInt();
+			s.push(num);
+		}
+		return s;
+	}
+	public static void stkStk(Stack<Integer> s1,Stack<Integer> s2) {
+		while(!s1.isEmpty()) {//2
+			s2.push(s1.pop());
+		}
+	}
+	public static int depth(Stack<Integer> s, int k) {
+		int i=0;Stack<Integer> s1= new Stack<Integer>();
+		while(i<=k) {//3
+			if(s.isEmpty()) {return 999;}
+			if(i==k) {return s1.peek();}
+			s1.push(s.pop());
+			i++;
+		}
+		return 999;	
+	}
+	public static int outBig(Stack<Integer> s) {
+		Stack<Integer> s1= new Stack<Integer>();
+		int max=0;//4
+		while(!s.isEmpty()) {
+			Math.max(max, s.peek());
+			s1.push(s.pop());
+		}
+		while(!s1.isEmpty()) {
+			s.push(s1.pop());
+		}
+		return max;
+	}
+	public static Stack<Integer> inSort(Stack<Integer> s, int x) {
+		Stack<Integer> s1= new Stack<Integer>();
+		while(!s.isEmpty()) {//5
+			if(x<s.peek()) {s1.push(x);}
+			else {s1.push(s.pop());}
+		}
+		while(!s1.isEmpty()) {
+			s.push(s1.pop());
+		}
+		return s;
+	}
+	public static Stack<Integer> nn(Stack<Integer> s){
+		Stack<Integer> s1= new Stack<Integer>();
+		s1.push(s.pop());
+		while(!s.isEmpty()) {//6
+			s1= inSort(s1,s.pop());
+		}
+		while(!s1.isEmpty()) {
+			s.push(s1.pop());
+		}
+		return s;
+	}
+
+}
+import java.util.Stack;
+
+public class TestStack {
+	public static void main(String[] args) {
+		Stack<Integer> s= new Stack<Integer>();//1
+		IntStackUtils s1= new IntStackUtils(s);
+		int k=(int) (Math.random()*(10) + 1);
+		System.out.println(s1.depth(s, k)+ " "+ k);
+		//2
+		Stack<Integer> ss= new Stack<Integer>();//1
+
+		IntStackUtils s2= new IntStackUtils(ss);
+		ss=s2.nn(ss);
+	}
+
+}
