@@ -84,3 +84,81 @@ public class TestStack {
 	}
 
 }
+
+
+
+
+
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Q1 {with two stacks, return the first sum of two following numbers fom stack s1 that is bigger then the biggest sum of tow following numbers in stack s2
+	public static Scanner reader=new Scanner(System.in);
+	public static void main(String[] args) {
+		Stack<Integer> s1= new Stack<Integer>();
+		s1=fillStack(s1);
+		Stack<Integer> s2= new Stack<Integer>();
+		s2=fillStack(s2);
+		int num= sum(s1,s2);
+		System.out.println(num);
+	}
+	public static int sum(Stack<Integer> s1, Stack<Integer> s2) {
+		int[] pairs= pairs(s2);
+		Stack<Integer> ss= new Stack<Integer>();
+		int max=0,sum=0;
+		for(int i: pairs) {
+			max=Math.max(max, i);
+		}
+		while(!s1.isEmpty()) {
+			sum+=s1.peek();
+			ss.push(s1.pop());
+			sum+=s1.peek();
+			if(sum>max) {return sum;}
+			else {
+				sum=0;
+			}
+		}
+		return 0;
+	}
+	public static int[] pairs(Stack<Integer> s) {
+		int[] p= new int[s.size()/2];
+		Stack<Integer> ss= new Stack<Integer>();
+		int cnt=0,sum=0;
+		while(!s.isEmpty() && cnt<p.length ) {
+			sum+=s.peek();
+			ss.push(s.pop());
+			sum+=s.peek();
+			p[cnt]=sum;
+			sum=0;cnt++;
+		}
+		while(!ss.isEmpty()) {
+			s.push(ss.pop());
+		}
+		return p;
+	}
+	public static Stack<Integer> fillStack(Stack<Integer> s){
+		int num= reader.nextInt();//1
+		while(num!=-1) {
+			s.push(num);
+			num=reader.nextInt();
+		}
+		return s;
+	}
+//	7  input
+//	6
+//	14
+//	8
+//	12
+//	9
+//	7
+//	-1
+//	11
+//	9
+//	1
+//	4
+//	13
+//	4
+//	8
+//	2
+//	-1
+}
