@@ -1,23 +1,17 @@
-import java.util.*;
-import java.util.Map.Entry;
-public class encyption {
+public class Encryption {
 	public static Scanner reader = new Scanner(System.in);
 	private static HashMap<Character,String> typeofEncryption = new HashMap<Character,String>();
 	private static HashMap<String,HashMap<Character,String>> allEncryptions;
 	public static void main(String[] args) {
-		long startTime = System.nanoTime();
-		String str,enc,dec;
-		typeofEncryption=makeRandomEncrytion(); 
+	    String str,enc,dec;
+            typeofEncryption=makeRandomEncryption(); 
 	    System.out.println("enter a string to encrypt");
 	    str = reader.next();		
 	    enc = encyptCode(str);
 		dec = decryptCode(enc);
 		System.out.println("encryption is "+ enc + " decryption is "+dec);
-		long endTime   = System.nanoTime();
-		long totalTime = endTime - startTime;
-		System.out.println(totalTime);
 	}
-	public static HashMap<Character,String> makeRandomEncrytion()
+	public static HashMap<Character,String> makeRandomEncryption()
 	{//random Encryption generator for the whole alphabet thats all lower case a-z
 		int num =(int) ((Math.random() * (4)) + 2);//between 2-5
 		HashMap<Character,String> hm = new HashMap<Character, String>();
@@ -56,22 +50,20 @@ public class encyption {
 	public static String decryptCode(String str)
 	{//change so is recursive because there can be multiple options
 		String subString="",decrypt="";
-		int num=0,j,cnt;
+		int num=0,j;
 		while(num < str.length())
 		{
 			j=2;
-			cnt=0;
 			if (num + j <= str.length())
 			{
 			   subString= (String) str.substring(num, num+j);
 			}
 			else
 			{
-				System.out.println(decrypt);
 				return decrypt;
 			}
 			char c= ' ';
-			while(c == ' ' && cnt<26 )//27 letters in the alphabet times the amount of length that can be 2-5 letters
+			while(c == ' ' )//27 letters in the alphabet times the amount of length that can be 2-5 letters
 			{
 				c = (char)getKeyByValue(typeofEncryption,subString);//get the letter
 				if(c != ' ')
@@ -79,7 +71,6 @@ public class encyption {
 					decrypt+=c;
 					num+=j;
 				}
-				cnt++;
 				j++;
 				if (num + j <= str.length())
 				{
@@ -91,7 +82,6 @@ public class encyption {
 				}
 			}
 		}
-		System.out.println(decrypt);
 		return decrypt;
 	}
 	public static Character getKeyByValue(HashMap<Character, String> map, String value) {
@@ -103,3 +93,4 @@ public class encyption {
 	    return ' ';
 	}
 }
+
