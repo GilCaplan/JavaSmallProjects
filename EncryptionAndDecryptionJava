@@ -85,6 +85,10 @@ public class encyption {
 				{
 				   subString= (String) str.substring(num, num+j);
 				}
+				else
+				{
+					return decrypt;
+				}
 			}
 		}
 		System.out.println(decrypt);
