@@ -1,0 +1,101 @@
+import java.util.*;
+import java.util.Map.Entry;
+public class encyption {
+	public static Scanner reader = new Scanner(System.in);
+	private static HashMap<Character,String> typeofEncryption = new HashMap<Character,String>();
+	private static HashMap<String,HashMap<Character,String>> allEncryptions;
+	public static void main(String[] args) {
+		long startTime = System.nanoTime();
+		String str,enc,dec;
+		typeofEncryption=makeRandomEncrytion(); 
+	    System.out.println("enter a string to encrypt");
+	    str = reader.next();		
+	    enc = encyptCode(str);
+		dec = decryptCode(enc);
+		System.out.println("encryption is "+ enc + " decryption is "+dec);
+		long endTime   = System.nanoTime();
+		long totalTime = endTime - startTime;
+		System.out.println(totalTime);
+	}
+	public static HashMap<Character,String> makeRandomEncrytion()
+	{//random Encryption generator for the whole alphabet thats all lower case a-z
+		int num =(int) ((Math.random() * (4)) + 2);//between 2-5
+		HashMap<Character,String> hm = new HashMap<Character, String>();
+		String alphabet = "abcdefghijklmnopqrstuvwxwz";
+		String letterE;
+		for(int i=0;i<alphabet.length();i++)
+		{
+			letterE="";
+			int ascii = (int) (Math.random() * (126-33)+33);
+			for(int j=0;j<num;j++)
+			{
+				letterE+=(char)ascii;
+				ascii = (int) (Math.random() * (126-33)+33);
+			}
+			num =(int) ((Math.random() * (4)) + 2);
+			hm.put((char)alphabet.charAt(i), letterE);
+		}
+		return hm;
+	}
+	public static String encyptCode(String str)
+	{
+		String encrypt="",value="";
+		for(int i=0;i<str.length();i++) 
+		{
+			value=typeofEncryption.get(str.charAt(i));
+			encrypt+=value;
+		}
+		return encrypt;
+	}
+	public static void printEncryption(HashMap<Character,String> hm)
+	{
+		 for (Entry<Character, String> set :hm.entrySet()) {
+              System.out.println(set.getKey() + " = " + set.getValue());
+        }
+	}
+	public static String decryptCode(String str)
+	{//change so is recursive because there can be multiple options
+		String subString="",decrypt="";
+		int num=0,j,cnt;
+		while(num < str.length())
+		{
+			j=2;
+			cnt=0;
+			if (num + j <= str.length())
+			{
+			   subString= (String) str.substring(num, num+j);
+			}
+			else
+			{
+				System.out.println(decrypt);
+				return decrypt;
+			}
+			char c= ' ';
+			while(c == ' ' && cnt<26 )//27 letters in the alphabet times the amount of length that can be 2-5 letters
+			{
+				c = (char)getKeyByValue(typeofEncryption,subString);//get the letter
+				if(c != ' ')
+				{
+					decrypt+=c;
+					num+=j;
+				}
+				cnt++;
+				j++;
+				if (num + j <= str.length())
+				{
+				   subString= (String) str.substring(num, num+j);
+				}
+			}
+		}
+		System.out.println(decrypt);
+		return decrypt;
+	}
+	public static Character getKeyByValue(HashMap<Character, String> map, String value) {
+	    for (Entry<Character, String> entry : map.entrySet()) {
+	        if (Objects.equals(value, entry.getValue())) {
+	            return entry.getKey();
+	        }
+	    }
+	    return ' ';
+	}
+}
