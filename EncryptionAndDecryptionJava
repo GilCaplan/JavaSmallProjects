@@ -26,7 +26,6 @@ public class encryption {
 					ascii = (int) (Math.random() * (126-33)+33);
 				}
 			}
-			
 			num =(int) ((Math.random() * (max-min)) + min);
 			hm.put((char)alphabet.charAt(i), letterE.toString());
 		}
