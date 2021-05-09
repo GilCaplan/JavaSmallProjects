@@ -26,6 +26,7 @@ public class encryption {
 					ascii = (int) (Math.random() * (126-33)+33);
 				}
 			}
+			
 			num =(int) ((Math.random() * (max-min)) + min);
 			hm.put((char)alphabet.charAt(i), letterE.toString());
 		}
@@ -87,6 +88,10 @@ public class encryption {
 				{
 				   subString= (String) str.substring(num, num+j);
 				}
+				if(j>max+2)
+				{
+					return decrypt.toString();
+				}
 			}
 		}
 		return decrypt.toString();
@@ -109,6 +114,7 @@ public class encryption {
             }
             typeofEncryption = makeRandomEncrytion();
             enc = encryptCode(sb.toString());
+            System.out.println(sb.toString());
             dec = decryptCode(enc);
             if (!sb.toString().equals(dec)) {
                 System.out.println("\u001B[31m FAILED: \u001B[0m");
@@ -121,4 +127,5 @@ public class encryption {
         }
     }
 }
+
 
