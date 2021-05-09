@@ -3,47 +3,54 @@ import java.util.Map.Entry;
 public class encryption {
 	public static Scanner reader = new Scanner(System.in);
 	private static HashMap<Character,String> typeofEncryption = new HashMap<Character,String>();
-	private static HashMap<String,HashMap<Character,String>> allEncryptions;
+	private static int min=1,max=4;//max is actually max-1 so max letters will be 3
 	public static void main(String[] args) {
-		String str,enc,dec;
-		typeofEncryption=makeRandomEncrytion(); 
-	    System.out.println("enter a string to encrypt");
-	    str = reader.next();		
-	    enc = encyptCode(str);
-	    System.out.println("encryption is "+ enc );
-		dec = decryptCode(enc);
-		System.out.println("decryption is "+dec);
-//		printEncryption(typeofEncryption);
+		test();
 	}
 	public static HashMap<Character,String> makeRandomEncrytion()
 	{//random Encryption generator for the whole alphabet thats all lower case a-z
-		int num =(int) ((Math.random() * (4)) + 2);//between 2-5
+		int num =(int) ((Math.random() * (max-min)) + min);//between 2-5
 		HashMap<Character,String> hm = new HashMap<Character, String>();
 		String alphabet = "abcdefghijklmnopqrstuvwxyz";
-		String letterE;
+		StringBuilder letterE; 
 		for(int i=0;i<alphabet.length();i++)
 		{
-			letterE="";
-			int ascii = (int) (Math.random() * (126-33)+33);
-			for(int j=0;j<num;j++)
+			letterE=new StringBuilder();
+			int ascii = (int) (Math.random() * (126-33)+33);//we only want certain characters from the ascii table
+			while(hm.containsValue(letterE.toString()))
 			{
-				letterE+=(char)ascii;
-				ascii = (int) (Math.random() * (126-33)+33);
+				letterE = new StringBuilder();
+				for(int j=0;j<num;j++)
+				{
+					letterE.append((char)ascii);
+					ascii = (int) (Math.random() * (126-33)+33);
+				}
 			}
-			num =(int) ((Math.random() * (4)) + 2);
-			hm.put((char)alphabet.charAt(i), letterE);
+			
+			num =(int) ((Math.random() * (max-min)) + min);
+			hm.put((char)alphabet.charAt(i), letterE.toString());
 		}
+		letterE=new StringBuilder();
+		int ascii = (int) (Math.random() * (126-33)+33);
+		letterE = new StringBuilder();
+		for(int j=0;j<num;j++)
+		{
+			letterE.append((char)ascii);
+			ascii = (int) (Math.random() * (126-33)+33);
+		}
+		hm.put((char)'a', letterE.toString());
 		return hm;
 	}
-	public static String encyptCode(String str)
+	public static String encryptCode(String str)
 	{
-		String encrypt="",value="";
+		String value="";
+		StringBuilder encrypt=new StringBuilder();  
 		for(int i=0;i<str.length();i++) 
 		{
 			value=typeofEncryption.get(str.charAt(i));
-			encrypt+=value;
+			encrypt.append(value);
 		}
-		return encrypt;
+		return encrypt.toString();
 	}
 	public static void printEncryption(HashMap<Character,String> hm)
 	{
@@ -53,18 +60,19 @@ public class encryption {
 	}
 	public static String decryptCode(String str)
 	{//change so is recursive because there can be multiple options
-		String subString="",decrypt="";
+		String subString="";
+		StringBuilder decrypt=new StringBuilder();  
 		int num=0,j;
 		while(num < str.length())
 		{
-			j=2;
+			j=min;
 			if (num + j <= str.length())
 			{
 			   subString= (String) str.substring(num, num+j);
 			}
 			else
 			{
-				return decrypt;
+				return decrypt.toString();
 			}
 			char c= ' ';
 			while(c == ' ' )//27 letters in the alphabet times the amount of length that can be 2-5 letters
@@ -72,7 +80,7 @@ public class encryption {
 				c = (char)getKeyByValue(typeofEncryption,subString);//get the letter
 				if(c != ' ')
 				{
-					decrypt+=c;
+					decrypt.append(c);
 					num+=j;
 				}
 				j++;
@@ -82,7 +90,7 @@ public class encryption {
 				}
 			}
 		}
-		return decrypt;
+		return decrypt.toString();
 	}
 	public static Character getKeyByValue(HashMap<Character, String> map, String value) {
 	    for (Entry<Character, String> entry : map.entrySet()) {
@@ -92,5 +100,26 @@ public class encryption {
 	    }
 	    return ' ';
 	}
+	static void test(){
+        Random rand = new Random(); //instance of random class
+        String enc,dec;
+        for (int j = 0; j < 100; j++) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 10; i++) {
+                sb.append((char) (97 + rand.nextInt(26)));
+            }
+            typeofEncryption = makeRandomEncrytion();
+            enc = encryptCode(sb.toString());
+            dec = decryptCode(enc);
+            if (!sb.toString().equals(dec)) {
+                System.out.println("\u001B[31m FAILED: \u001B[0m");
+                System.out.println(sb.toString());
+                System.out.println(dec);
+                printEncryption(typeofEncryption);
+            }else{
+                System.out.println("\u001B[32m PASSED! \u001B[0m");
+            }
+        }
+    }
 }
 
