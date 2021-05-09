@@ -1,21 +1,25 @@
-public class Encryption {
+import java.util.*;
+import java.util.Map.Entry;
+public class encryption {
 	public static Scanner reader = new Scanner(System.in);
 	private static HashMap<Character,String> typeofEncryption = new HashMap<Character,String>();
 	private static HashMap<String,HashMap<Character,String>> allEncryptions;
 	public static void main(String[] args) {
-	    String str,enc,dec;
-            typeofEncryption=makeRandomEncryption(); 
+		String str,enc,dec;
+		typeofEncryption=makeRandomEncrytion(); 
 	    System.out.println("enter a string to encrypt");
 	    str = reader.next();		
 	    enc = encyptCode(str);
+	    System.out.println("encryption is "+ enc );
 		dec = decryptCode(enc);
-		System.out.println("encryption is "+ enc + " decryption is "+dec);
+		System.out.println("decryption is "+dec);
+//		printEncryption(typeofEncryption);
 	}
-	public static HashMap<Character,String> makeRandomEncryption()
+	public static HashMap<Character,String> makeRandomEncrytion()
 	{//random Encryption generator for the whole alphabet thats all lower case a-z
 		int num =(int) ((Math.random() * (4)) + 2);//between 2-5
 		HashMap<Character,String> hm = new HashMap<Character, String>();
-		String alphabet = "abcdefghijklmnopqrstuvwxwz";
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
 		String letterE;
 		for(int i=0;i<alphabet.length();i++)
 		{
@@ -75,10 +79,6 @@ public class Encryption {
 				if (num + j <= str.length())
 				{
 				   subString= (String) str.substring(num, num+j);
-				}
-				else
-				{
-					return decrypt;
 				}
 			}
 		}
