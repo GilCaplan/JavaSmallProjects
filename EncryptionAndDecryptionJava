@@ -9,14 +9,14 @@ public class encryption {
 		int num =(int) ((Math.random() * (max-min)) + min);//between 2-5
 		HashMap<Character,String> hm = new HashMap<Character, String>();
 		String alphabet = "abcdefghijklmnopqrstuvwxyz";
-		StringBuilder letterE= new StringBuilder(" "); int ascii=100;
+		StringBuilder letterE= new StringBuilder(""); int ascii=100;
 		for(int i=0;i<alphabet.length();i++)
 		{
-			letterE=new StringBuilder(" ");
+			letterE=new StringBuilder("");
 			ascii = (int) (Math.random() * (126-33)+33);//we only want certain characters from the ascii table
-			while(hm.containsValue(letterE.toString())||hm.containsValue(letterE.toString().substring(0, letterE.length()-1)))
+			while(checkexistingInHM(letterE.toString(), hm))
 			{
-				letterE = new StringBuilder();
+				letterE = new StringBuilder("");
 				for(int j=0;j<num;j++)
 				{
 					letterE.append((char)ascii);
@@ -26,10 +26,10 @@ public class encryption {
 			num =(int) ((Math.random() * (max-min)) + min);
 			hm.put((char)alphabet.charAt(i), letterE.toString());
 		}
-		while(hm.containsValue(letterE.toString())|| hm.containsValue(letterE.toString().substring(0,letterE.toString().length()-1)))
+		while(checkexistingInHM(letterE.toString(), hm))
 		{
 			ascii = (int) (Math.random() * (126-33)+33);
-			letterE = new StringBuilder();
+			letterE = new StringBuilder("");
 			for(int j=0;j<num;j++)
 			{
 				letterE.append((char)ascii);
@@ -40,12 +40,18 @@ public class encryption {
 		return hm;
 	}
 	public static boolean checkexistingInHM(String letter, HashMap<Character, String> hm)
-	{
-		for(int i=0;i<letter.length()-1;i++)
-			if(hm.containsValue(letter.substring(0,i)))
-				return true;		
-		return false;
-	}
+    {
+        if(letter.equals(""))
+        {
+            return true;
+        }
+        for(Character key : hm.keySet()) {
+            String str = hm.get(key);
+            if (str.contains(letter) || letter.contains(str))
+                return true;
+        }
+        return false;
+    }
 	public static String encryptCode(String str)
 	{
 		String value="";
@@ -108,8 +114,7 @@ public class encryption {
 							num=0;g=0;
 							j=gg[g]+1;
 							subString= (String) str.substring(num, num+j);
-						}
-						
+						}	
 				}
 				
 			}
@@ -183,5 +188,3 @@ public class encryption {
         System.out.println(cnt + " were successful");
         System.out.println((1000-cnt) + " were unsuccessful");
     }
-
-}
