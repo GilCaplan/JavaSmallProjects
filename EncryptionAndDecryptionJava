@@ -1,12 +1,7 @@
-import java.util.*;
-import java.util.Map.Entry;
 public class encryption {
 	public static Scanner reader = new Scanner(System.in);
 	private static HashMap<Character,String> typeofEncryption = new HashMap<Character,String>();
-	private static int min=1,max=4;//max is actually max-1 so max letters will be 3
-	public static void main(String[] args) {
-		test();
-	}
+	private static int min=2,max=4;//max is actually max-1 so max letters will be 3
 	public static HashMap<Character,String> makeRandomEncrytion()
 	{//random Encryption generator for the whole alphabet thats all lower case a-z
 		int num =(int) ((Math.random() * (max-min)) + min);//between 2-5
@@ -26,7 +21,6 @@ public class encryption {
 					ascii = (int) (Math.random() * (126-33)+33);
 				}
 			}
-			
 			num =(int) ((Math.random() * (max-min)) + min);
 			hm.put((char)alphabet.charAt(i), letterE.toString());
 		}
@@ -52,34 +46,31 @@ public class encryption {
 		}
 		return encrypt.toString();
 	}
-	public static void printEncryption(HashMap<Character,String> hm)
-	{
-		 for (Entry<Character, String> set :hm.entrySet()) {
-              System.out.println(set.getKey() + " = " + set.getValue());
-        }
-	}
 	public static String decryptCode(String str)
 	{//change so is recursive because there can be multiple options
 		String subString="";
-		StringBuilder decrypt=new StringBuilder();  
-		int num=0,j;
+		StringBuilder decrypt=new StringBuilder(); 
+		int num=0,j,g=0;int[] gg= new int[str.length()];
 		while(num < str.length())
 		{
 			j=min;
 			if (num + j <= str.length())
 			{
-			   subString= (String) str.substring(num, num+j);
+			   subString = (String) str.substring(num, num+j);
 			}
 			else
 			{
 				return decrypt.toString();
 			}
 			char c= ' ';
-			while(c == ' ' )//27 letters in the alphabet times the amount of length that can be 2-5 letters
+			while(c == ' ' && decrypt.toString().length() < str.length()+1)//27 letters in the alphabet times the amount of length that can be 2-5 letters
 			{
+				
 				c = (char)getKeyByValue(typeofEncryption,subString);//get the letter
 				if(c != ' ')
 				{
+					gg[g] = subString.length();
+					g++;
 					decrypt.append(c);
 					num+=j;
 				}
@@ -88,10 +79,30 @@ public class encryption {
 				{
 				   subString= (String) str.substring(num, num+j);
 				}
-				if(j>max+2)
+				if(j > max+1)
 				{
-					return decrypt.toString();
+					if(num < str.length() && decrypt.length()-1>0)
+					{
+						decrypt =new StringBuilder(decrypt.toString().substring(0, decrypt.length() - 1));
+						num=num-gg[g-1];
+						j=gg[g-1]+1;g--;
+						if(decrypt.toString().length() != 0)
+						{
+							subString= (String) str.substring(num, num+j);
+						}
+					}
+					else
+						if(decrypt.length() == 1)
+						{
+							decrypt =new StringBuilder(decrypt.toString().substring(0, decrypt.length() - 1));
+							num=0;g=0;
+							j=gg[g]+1;
+							subString= (String) str.substring(num, num+j);
+						}
+						else
+							return decrypt.toString();
 				}
+				
 			}
 		}
 		return decrypt.toString();
@@ -104,28 +115,32 @@ public class encryption {
 	    }
 	    return ' ';
 	}
-	static void test(){
+	public static void printEncryption(HashMap<Character,String> hm)
+	{
+		 for (Entry<Character, String> set :hm.entrySet()) {
+              System.out.println(set.getKey() + " = " + set.getValue());
+        }
+	}
+	public static void main(String[] args) {
         Random rand = new Random(); //instance of random class
-        String enc,dec;
-        for (int j = 0; j < 100; j++) {
+        String enc,dec;int cnt=0,attempts=100;
+        typeofEncryption = makeRandomEncrytion(); 
+//        printEncryption(typeofEncryption);
+        for (int j = 0; j < attempts; j++) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 10; i++) {
                 sb.append((char) (97 + rand.nextInt(26)));
             }
-            typeofEncryption = makeRandomEncrytion();
             enc = encryptCode(sb.toString());
-            System.out.println(sb.toString());
             dec = decryptCode(enc);
             if (!sb.toString().equals(dec)) {
                 System.out.println("\u001B[31m FAILED: \u001B[0m");
                 System.out.println(sb.toString());
-                System.out.println(dec);
-                printEncryption(typeofEncryption);
+                System.out.println(dec+ " failed decryption");
             }else{
+            	cnt++;
                 System.out.println("\u001B[32m PASSED! \u001B[0m");
             }
-        }
+        }System.out.println(cnt + " attempts out of " + attempts +" were successful");
     }
-}
-
 
