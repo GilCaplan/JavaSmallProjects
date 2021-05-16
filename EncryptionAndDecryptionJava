@@ -40,7 +40,7 @@ public class encryption {
 		return hm;
 	}
 	public static boolean checkexistingInHM(String letter, HashMap<Character, String> hm)
-    {
+    { 
         if(letter.equals(""))
         {
             return true;
