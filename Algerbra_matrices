@@ -1,0 +1,135 @@
+package matrice;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+public class Multiplication {
+	public static void main(String[] args) throws FileNotFoundException {
+		//
+		List<int[][]> matrices = newMatrice("inputa");// function which gets the file with your matrices 
+		int[][] a = matrices.get(0);
+		
+		int[][] b = matrices.get(1);
+		int[][] c = matrices.get(2);
+		
+		int[][] threeA = muls(a,3);
+		PrintMatrice(threeA);
+		System.out.println();//can play around to use the different functions for your calcultations
+		int[][] tC = trace(c);
+		
+		
+		tC = muls(tC, 2);
+		PrintMatrice(tC);System.out.println();
+		PrintMatrice(additionM(threeA, tC));
+		
+	}
+	public static int[][] muls(int[][] A, int num){//multiplies a matrice by a scalar number
+		int[][] mulscalar = new int[A.length][A[0].length];
+		for(int i=0; i< A.length; i++) {
+			for(int j=0; j< A[0].length; j++) {
+				mulscalar[i][j] = A[i][j] * num; 
+			}
+		}
+		return mulscalar;
+	}
+	public static int[][] additionM(int[][] A, int[][] B){
+		if(A.length != B.length || A[0].length != B[0].length) {
+			return new int[0][0];
+		}
+		int[][] AplusB = new int[A.length][A[0].length];
+		for(int i=0; i< A.length; i++) {
+			for(int j=0; j< A[0].length; j++) {
+				AplusB[i][j] = A[i][j] + B[i][j]; 
+			}
+		}
+		return AplusB;
+	}
+	public static int[][] trace(int[][] A){// transposes a matrice A(ij)t = A(ji)
+		int[][] At = new int[A[0].length][A.length];
+		for(int i=0; i< A.length; i++) {
+			for(int j=0; j< A[0].length; j++) {
+				At[j][i] = A[i][j]; 
+			}
+		}
+		return At;
+	}
+	public static int[][] MulMatrices(int[][] A, int[][] B){// multiplies two matrices by each other A(nxm) * B(mxk) = AB(nxk)
+		if(A[0].length != B.length) {//a.length = column, a[0].length = row
+			System.out.println("cant");
+			return new int[][] {};
+		}
+		int colA = A.length, rowB = B[0].length;
+		int[][] newMatrice = new int[colA][rowB];
+		for(int col = 0; col< colA; col++) {//col
+			for (int row=0; row< rowB; row++) {//row
+				newMatrice[col][row] = mul(A, B, col, row);
+			}
+		}
+		
+		return newMatrice;
+	}
+	public static int mul(int[][] A, int[][] B, int col, int row){//sub function which multiplies the row and col between two matrices at a certain index of the product matrice AB
+		int len =A[0].length, sum =0;
+		for(int i = 0; i< len; i++) {
+			sum+= A[col][i]*B[i][row];
+		}
+		return sum;
+	}
+	public static void PrintMatrice(int[][] A) {// prints the matrice
+		if(A.length == 0 || A[0].length ==0) {
+			System.out.println("Error in multiplication");
+			return;
+		}
+		for (int row=0; row< A.length; row++) {//row
+			System.out.println();//col
+			for(int col = 0; col < A[0].length; col++) {
+				System.out.print(A[row][col] + " ");
+		}
+		}
+	}
+	public static List<int[][]> newMatrice(String filename) throws FileNotFoundException {//gets matrice from the text file
+		Scanner reader = new Scanner(new File(filename+".txt"));
+		List<List<String[]>> matrices =  new ArrayList<List<String[]>>();//matrices from the file
+		List<String[]> s = new ArrayList<String[]>();//string data for that matrice
+		List<int[][]> mat =  new ArrayList<int[][]>();//all the matrices that we want to return
+		while (reader.hasNextLine()) {
+	        String data = reader.nextLine();
+	        if(data.length() > 0 || data.contains("[a-bA-B]+")) {
+	        	String[] l = data.split("\\s");
+		        s.add(l);
+	        }
+	        else {
+		        matrices.add(s);
+	        	s = new ArrayList<String[]>();
+	        }
+	    }
+	    reader.close();int[][] m;
+	    for(int n=0; n < matrices.size();n++) {
+	    	s = matrices.get(n);
+			m = new int[s.size()][s.get(1).length];
+			for(int i=0; i< s.size(); i++) {
+				for(int j=0; j< s.get(i).length; j++) {
+					m[i][j] = s.get(i)[j] != ""|| s.get(i)[j] != " "?Integer.valueOf(s.get(i)[j]): -999;
+				}
+				
+			}
+			mat.add(m);
+	    }
+		return mat;
+	}
+}
+//example for the file:
+//1 -4 0
+//-2 0 -1
+//
+//-4 1 0 
+//0 -1 2
+//-2 0 4
+//
+//-4 1
+//-1 -2
+//2 -1
+//
+
+
