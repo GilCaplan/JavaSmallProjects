@@ -107,16 +107,19 @@ public class Multiplication {
 	    reader.close();int[][] m;
 	    for(int n=0; n < matrices.size();n++) {
 	    	s = matrices.get(n);
-			m = new int[s.size()][s.get(1).length];
-			for(int i=0; i< s.size(); i++) {
-				for(int j=0; j< s.get(i).length; j++) {
-					m[i][j] = s.get(i)[j] != ""|| s.get(i)[j] != " "?Integer.valueOf(s.get(i)[j]): -999;
-				}
-				
+		if(s.size() == 0) {
+	    		return mat;
+	    	}
+		m = new int[s.size()][s.get(1).length];
+		for(int i=0; i< s.size(); i++) {
+			for(int j=0; j< s.get(i).length; j++) {
+				m[i][j] = s.get(i)[j] != ""|| s.get(i)[j] != " "?Integer.valueOf(s.get(i)[j]): -999;
 			}
-			mat.add(m);
+
+		}
+		mat.add(m);
 	    }
-		return mat;
+	return mat;
 	}
 }
 //example for the file:
